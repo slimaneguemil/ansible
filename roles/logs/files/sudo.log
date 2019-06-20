@@ -1,0 +1,9 @@
+/var/log/sudo.log
+{
+    missingok
+    weekly
+    size 2M
+    copytruncate
+    rotate 54
+    notifempty
+}

@@ -1,12 +1,49 @@
 ---
-- name: backup logrotate.d
+
+- name: Step1 By default sudo logs will not generated in /var/log, so we need to add the line in sudoers.
+  copy:
+    content: "Defaults        logfile="/var/log/sudo.log""
+    dest: /etc/sudoers
+    owner: root
+    group: root
+    mode: '0644'
+    backup: yes
+
+- name: Step2  Backup logrotate.d
   command: "cp -r /etc/logrotate.d /etc/logrotate.d_orig_back"
 
-- name: Copy a new "logrotate.conf file into place, backing up the original if it differs from the copied version
+- name: Step 3 Copy a new "logrotate.conf" file into place, backing up the original if it differs from the copied version
   copy:
     src: logrotate.conf
     dest: /etc/logrotate.conf
-#    owner: root
-#    group: root
+    owner: root
+    group: root
     mode: '0644'
     backup: yes
+
+- name: Step 4a Copy a new "lastlog.log" file in /etc/logrotate.d
+  copy:
+    src: lastlog.log
+    dest: /etc/logrotate.d
+    owner: root
+    group: root
+    mode: '0644'
+
+- name: Step 4b Copy a new "sudo.log" file in /etc/logrotate.d
+  copy:
+    src: sudo.log
+    dest: /etc/logrotate.d
+    owner: root
+    group: root
+    mode: '0644'
+
+- name: Step 5 Copy a new "syslog file in /etc/logrotate.d
+  copy:
+    src: syslog.log
+    dest: /etc/logrotate.d
+    owner: root
+    group: root
+    mode: '0644'
+
+- name: Step 6 Restart the logrotate file
+  command: "logrotate -f /etc/logrotate.conf"
