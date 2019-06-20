@@ -1,10 +1,12 @@
 ---
+- name: backup logrotate.d
+  command: "cp -r /etc/logrotate.d /etc/logrotate.d_orig_back"
 
-- name: Copy a new "ntp.conf file into place, backing up the original if it differs from the copied version
+- name: Copy a new "logrotate.conf file into place, backing up the original if it differs from the copied version
   copy:
-    src: /logrotate.conf
+    src: logrotate.conf
     dest: /etc/logrotate.conf
-    owner: root
-    group: root
+#    owner: root
+#    group: root
     mode: '0644'
     backup: yes
