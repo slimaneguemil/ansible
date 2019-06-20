@@ -37,7 +37,7 @@
     group: root
     mode: '0644'
 
-- name: Step 5 Copy a new "syslog file in /etc/logrotate.d
+- name: Step 5 Copy a new "syslog.log" file in /etc/logrotate.d
   copy:
     src: syslog.log
     dest: /etc/logrotate.d
