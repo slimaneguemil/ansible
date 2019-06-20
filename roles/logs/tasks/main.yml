@@ -2,7 +2,7 @@
 
 - name: Step1 By default sudo logs will not generated in /var/log, so we need to add the line in sudoers.
   copy:
-    content: "Defaults        logfile="/var/log/sudo.log""
+    content: 'Defaults        logfile="/var/log/sudo.log"'
     dest: /etc/sudoers
     owner: root
     group: root
