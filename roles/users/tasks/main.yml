@@ -1,0 +1,30 @@
+---
+#- include_vars: list.yml
+
+- name: Add users | create users , shell, home dirs, change password
+  user:
+    name: '{{item}}'
+    password: "{{ 'password' | password_hash('sha512') }}"
+    state: present
+    comment: created with ansible
+    home: /home/{{item}}
+    update_password: always
+  with_items:
+    - '{{users}}'
+
+- name: Force to change password
+  command: "chage -d 0 '{{item}}'"
+  with_items:
+    - '{{users}}'
+
+- name: display users
+  command: "cut -d_ -f1 /etc/passwd"
+  register: hello
+
+- debug: msg="{{ hello.stdout }}"
+
+- name: ensure the users exist
+  user:
+   name: '{{item}}'
+  with_items:
+      - '{{users}}'

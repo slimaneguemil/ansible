@@ -1,0 +1,5 @@
+create a user and display results
+ansible-playbook demo.yaml -K
+
+test user :
+su - toto
