@@ -1,13 +1,24 @@
 ---
 
-- name: Step1 By default sudo logs will not generated in /var/log, so we need to add the line in sudoers.
-  copy:
-    content: "Defaults        logfile="/var/log/sudo.log""
-    dest: /etc/sudoers
-    owner: root
-    group: root
-    mode: '0644'
-    backup: yes
+#- name: Step1 By default sudo logs will not generated in /var/log, so we need to add the line in sudoers.
+#  copy:
+#    content: "Defaults        logfile="/var/log/sudo.log""
+#    dest: /etc/sudoers
+#    owner: root
+#    group: root
+#    mode: '0644'
+#    backup: yes
+
+
+# NOTE: Fully quoted because of the ': ' on the line. See the Gotchas in the YAML docs.
+- name: Validate the sudoers file before saving
+  lineinfile:
+    path: /etc/sudoers
+    state: present
+    regexp: '^%Defaults logfile='
+    line: '^%Defaults logfile="/var/log/sudo.log"'
+    validate: /usr/sbin/visudo -cf %s
+
 
 - name: Step2  Backup logrotate.d
   command: "cp -r /etc/logrotate.d /etc/logrotate.d_orig_back"
