@@ -1,15 +1,4 @@
 ---
-
-#- name: Step1 By default sudo logs will not generated in /var/log, so we need to add the line in sudoers.
-#  copy:
-#    content: "Defaults        logfile="/var/log/sudo.log""
-#    dest: /etc/sudoers
-#    owner: root
-#    group: root
-#    mode: '0644'
-#    backup: yes
-
-
 # NOTE: Fully quoted because of the ': ' on the line. See the Gotchas in the YAML docs.
 - name: Validate the sudoers file before saving
   lineinfile:
@@ -18,10 +7,8 @@
     regexp: '^%?Defaults	logfile='
     line: 'Defaults	logfile="/var/log/sudo.log"'
     validate: '/usr/sbin/visudo -cf %s'
+  when: ansible_os_family == "RedHat"
 
-
-- name: Step2  Backup logrotate.d
-  command: "cp -r /etc/logrotate.d /etc/logrotate.d_orig_back"
 
 - name: Step 3 Copy a new "logrotate.conf" file into place, backing up the original if it differs from the copied version
   copy:
@@ -31,30 +18,22 @@
     group: root
     mode: '0644'
     backup: yes
+  when: ansible_os_family == "RedHat"
 
-- name: Step 4a Copy a new "lastlog.log" file in /etc/logrotate.d
+
+- name: Step 4 Copy logging files  in /etc/logrotate.d
   copy:
-    src: lastlog.log
+    src: '{{item}}'
     dest: /etc/logrotate.d
     owner: root
     group: root
     mode: '0644'
-
-- name: Step 4b Copy a new "sudo.log" file in /etc/logrotate.d
-  copy:
-    src: sudo.log
-    dest: /etc/logrotate.d
-    owner: root
-    group: root
-    mode: '0644'
-
-- name: Step 5 Copy a new "syslog.log" file in /etc/logrotate.d
-  copy:
-    src: syslog.log
-    dest: /etc/logrotate.d
-    owner: root
-    group: root
-    mode: '0644'
+  with_items:
+    - lastlog.log
+    - sudo.log
+    - syslog.log
+  when: ansible_os_family == "RedHat"
 
 - name: Step 6 Restart the logrotate file
   command: "logrotate -f /etc/logrotate.conf"
+  when: ansible_os_family == "RedHat"
