@@ -15,9 +15,9 @@
   lineinfile:
     path: /etc/sudoers
     state: present
-    regexp: '^%Defaults logfile='
-    line: '^%Defaults logfile="/var/log/sudo.log"'
-    validate: /usr/sbin/visudo -cf %s
+    regexp: '^%?Defaults	logfile='
+    line: 'Defaults	logfile="/var/log/sudo.log"'
+    validate: '/usr/sbin/visudo -cf %s'
 
 
 - name: Step2  Backup logrotate.d

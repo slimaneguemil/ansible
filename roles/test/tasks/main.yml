@@ -1,0 +1,10 @@
+---
+# Validate the sudoers file before saving
+- name: Step 6 Restart the logrotate file
+  command: "/sbin/logrotate -d /etc/logrotate.conf"
+#  command: echo $HOME
+#  register: run_logrotate
+
+#- name: display
+#  debug:
+#    msg: "{{run_logrotate}}"

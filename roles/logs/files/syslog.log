@@ -1,5 +1,3 @@
-
-
 /var/log/cron
 /var/log/maillog
 /var/log/messages

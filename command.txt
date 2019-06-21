@@ -3,3 +3,6 @@ ansible-playbook demo.yaml -K
 
 test user :
 su - toto
+
+pkexec visudo
+Defaults        env_reset
