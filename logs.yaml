@@ -1,5 +1,5 @@
 ---
-- hosts: webservers
+- hosts: all
 #  gather_facts: no
   remote_user: 'ansible'
   become: yes
