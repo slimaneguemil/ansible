@@ -1,3 +1,6 @@
 ---
 users:
   - ansible
+  - toto
+  - titi
+  - tutu1
