@@ -1,0 +1,14 @@
+---
+- name: Add users | create users , shell, home dirs, change password
+  user:
+    name: '{{user}}'
+    password: "{{ 'password' | password_hash('sha512') }}"
+    state: present
+    comment: created with ansible
+    home: /home/{{user}}
+    update_password: on_create
+  register: var_change
+
+- name: Force to change password
+  command: "chage -d 0 '{{user}}'"
+  when: var_change.changed

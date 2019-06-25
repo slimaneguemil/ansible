@@ -1,9 +1,27 @@
 ---
-#- include_vars: list.yml
 
-- include_tasks: include_password.yaml
+- include_tasks: include_solaris.yml
   with_items:
     - '{{users}}'
   loop_control:
     loop_var: user
+  when: ansible_os_family == "Solaris"
 
+- include_tasks: include_centos.yaml
+  with_items:
+    - '{{users}}'
+  loop_control:
+    loop_var: user
+  when: ansible_os_family == "RedHat"
+
+- name: display users
+  command: "cut -d_ -f1 /etc/passwd"
+  register: hello
+
+- debug: msg="{{ hello.stdout }}"
+
+- name: ensure the users exist
+  user:
+    name: '{{item}}'
+  with_items:
+    - '{{users}}'
