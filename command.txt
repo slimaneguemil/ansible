@@ -1,8 +1,10 @@
-create a user and display results
-ansible-playbook demo.yaml -K
+playbooks contents
 
-test user :
-su - toto
+users.yml :create a user and display results
+logs.yml : manage logs
 
-pkexec visudo
-Defaults        env_reset
+how to run the playbook.
+step1 :
+edit main.yml and input include varaible accordingly
+step 2:
+ansible-playbook -i inventory main.yml -K

@@ -1,13 +1,15 @@
 ---
 
-- include_tasks: include_solaris.yml
+- name: 'OS = {{ansible_os_family}} : manage accounts'
+  include_tasks: include_solaris.yml
   with_items:
     - '{{users}}'
   loop_control:
     loop_var: user
   when: ansible_os_family == "Solaris"
 
-- include_tasks: include_centos.yaml
+- name: 'OS = {{ansible_os_family}} : manage accounts'
+  include_tasks: include_centos.yml
   with_items:
     - '{{users}}'
   loop_control:

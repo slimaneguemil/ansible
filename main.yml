@@ -1,0 +1,3 @@
+---
+- name : toto
+  include: playbooks/users.yml
