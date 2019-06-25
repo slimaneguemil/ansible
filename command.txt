@@ -3,8 +3,18 @@ playbooks contents
 users.yml :create a user and display results
 logs.yml : manage logs
 
+remarque : the target now is handle by a variable "nodes". this latter when running ansible-playbook with  -e "nodes=target"
+
 how to run the playbook.
 step1 :
-edit main.yml and input include varaible accordingly
+edit main.yml and input include variable accordingly
+
+
 step 2:
-ansible-playbook -i inventory main.yml -K
+ansible-playbook -i inventory main.yml -e "nodes=centos" -K
+or
+ansible-playbook -i inventory main.yml -e "nodes=all" -K
+
+
+you can avoid typing paramaters -i inventory by create environment varibale
+export ANSIBLE_INVENTORY=inventory

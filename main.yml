@@ -1,3 +1,7 @@
 ---
-- name : toto
+
+- name : play users book
   include: playbooks/users.yml
+
+#- name : play users book
+#  include: playbooks/logs.yml
