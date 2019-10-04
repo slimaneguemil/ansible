@@ -1,0 +1,24 @@
+---
+- hosts: localhost
+  gather_facts: false
+  connection: local
+  become: yes
+
+  tasks:
+    - name: Install our packages
+      apt:
+        name: "{{ item }}"
+        state: present
+        update_cache: true
+      with_items:
+        - apache2
+        - mysql-server
+        - mysql-common
+        - mysql-client
+    - name: Confirm services are running
+      service:
+        name: "{{ item }}"
+        state: running
+      with_items:
+        - apache2
+        - mysql
