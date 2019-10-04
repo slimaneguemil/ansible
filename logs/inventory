@@ -1,0 +1,5 @@
+centos ansible_host=3.121.87.0 ansible_user=centos ansible_ssh_private_key_file=~/.ssh/private_key.pem
+
+[webservers]
+centos
+
