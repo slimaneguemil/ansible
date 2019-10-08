@@ -12,8 +12,8 @@
 #crontab details #crontab -l
 #configured users #cat /etc/passwd
 #DNS Setup #cat /etc/resolv.conf
-#SSH Setup #cat /etc/sshd_config | grep PermitRootLogin
-#          #cat /etc/sshd_config | grep AllowUsers
+#SSH Setup #cat /etc/ssh/sshd_config | grep PermitRootLogin
+#          #cat /etc/ssh/sshd_config | grep AllowUsers
 #Log configurations #cat /etc/logrotate.conf
 #cat /etc/logrotate.d/sudolog
 #cat /etc/logrotate.d/syslog
@@ -75,17 +75,19 @@
       ignore_errors: true
       changed_when: false
 
-    - name: cat /etc/sshd_config | grep PermitRootLogin
-      shell: cat /etc/sshd_config | grep PermitRootLogin
+    - name: cat /etc/ssh/sshd_config | grep PermitRootLogin
+      shell: cat /etc/ssh/sshd_config | grep PermitRootLogin
       register: var_sshd1
       ignore_errors: true
       changed_when: false
+      become: true
 
-    - name: cat /etc/sshd_config | grep AllowUsers
-      shell: cat /etc/sshd_config | grep AllowUsers
+    - name: cat /etc/ssh/sshd_config | grep AllowUsers
+      shell: cat /etc/ssh/sshd_config | grep AllowUsers
       register: var_sshd2
       ignore_errors: true
       changed_when: false
+      become: true
 
     - name: cat /etc/logrotate.conf
       command: cat /etc/logrotate.conf
