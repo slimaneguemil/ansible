@@ -23,6 +23,7 @@
 ---
 
 - name: process on targethost
+  remote_user: ansible
   block:
     - name: get service facts
       service_facts:
@@ -121,6 +122,7 @@
       file:
         path: "{{path_output}}/{{ansible_date_time.year}}/{{ansible_date_time.month}}/{{ansible_date_time.day}}"
         state: directory
+      become: true
     - name: generate an output file for each target
       template:
         src: templates/output.txt.j2
@@ -129,7 +131,7 @@
         owner: root
         group: root
         mode: 0644
-  become: true
+      become: true
   delegate_to: localhost
 
 
