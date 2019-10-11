@@ -1,0 +1,138 @@
+#########################################################################
+#
+#                               goal:  Collect infra data
+#                               state: create directory in /home/ansible/output
+# hostname #hostname
+#host ip #ip a
+#ip route #ip r
+#host files #cat /etc/hosts
+#Selinux status #sestatus
+#firewall status #systemctl status firewalld
+#iptables status @iptable -L
+#crontab details #crontab -l
+#configured users #cat /etc/passwd
+#DNS Setup #cat /etc/resolv.conf
+#SSH Setup #cat /etc/ssh/sshd_config | grep PermitRootLogin
+#          #cat /etc/ssh/sshd_config | grep AllowUsers
+#Log configurations #cat /etc/logrotate.conf
+#cat /etc/logrotate.d/sudolog
+#cat /etc/logrotate.d/syslog
+#mysql router config #cat /etc/mysqlrouter/mysqlrouter.conf
+#########################################################################
+
+---
+
+- name: process on targethost
+  block:
+    - name: get service facts
+      service_facts:
+    - name: Inventory_hostname
+      debug:
+        msg: "{{ inventory_hostname }}"
+    - name: ansible_hostname
+      debug:
+        msg: "{{ ansible_hostname }}"
+    - name: host files
+      command: cat /etc/hosts
+      register: var_hosts
+      changed_when: false
+
+    - name: Selinux status
+      command: cat /etc/hosts
+      register: var_selinux
+      ignore_errors: true
+      changed_when: false
+    #firewall status #systemctl status firewalld
+    - name: Firewall status
+      debug: var=ansible_facts.services["firewalld"]
+      #command: systemctl status firewalld
+      register: var_firewall
+      ignore_errors: true
+      changed_when: false
+
+    #iptables status @iptable -L
+    - name: iptables status
+      command: iptable -L
+      register: var_iptable
+      ignore_errors: true
+      changed_when: false
+    #crontab details #crontab -l
+    - name: crontab details
+      command: crontab -l
+      register: var_crontab
+      ignore_errors: true
+      changed_when: false
+
+    - name: /etc/hosts file
+      command: cat /etc/passwd
+      register: var_passwd
+      changed_when: false
+
+    #    - set_fact: var_hosts2="{{var_hosts.stdout_lines}}"
+    - name: /etc/resolv.conf file
+      command: cat /etc/resolv.conf
+      register: var_resolv
+      ignore_errors: true
+      changed_when: false
+
+    - name: cat /etc/ssh/sshd_config | grep PermitRootLogin
+      shell: cat /etc/ssh/sshd_config | grep PermitRootLogin
+      register: var_sshd1
+      ignore_errors: true
+      changed_when: false
+      become: true
+
+    - name: cat /etc/ssh/sshd_config | grep AllowUsers
+      shell: cat /etc/ssh/sshd_config | grep AllowUsers
+      register: var_sshd2
+      ignore_errors: true
+      changed_when: false
+      become: true
+
+    - name: cat /etc/logrotate.conf
+      command: cat /etc/logrotate.conf
+      register: var_logrotate
+      ignore_errors: true
+      changed_when: false
+
+    - name: cat /etc/logrotate.d/sudolog
+      command: cat /etc/logrotate.d/sudolog
+      register: var_logrotate_sudolog
+      ignore_errors: true
+      changed_when: false
+
+    - name: cat /etc/logrotate.d/syslog
+      command: cat /etc/logrotate.d/syslog
+      register: var_logrotate_syslog
+      ignore_errors: true
+      changed_when: false
+
+    - name: cat /etc/mysqlrouter/mysqlrouter.conf
+      command: cat /etc/mysqlrouter/mysqlrouter.conf
+      register: var_mysqlrouter
+      ignore_errors: true
+      changed_when: false
+
+
+
+- name: switch to localhost
+  command: id
+  register: var_id
+  delegate_to: localhost
+
+- name: Create an output directory
+  debug: msg="output {{ var_id.stdout_lines }}"
+
+- name: Create an output directory
+  file:
+    path: "{{path_output}}/{{ansible_date_time.year}}/{{ansible_date_time.month}}/{{ansible_date_time.day}}"
+    state: directory
+  delegate_to: localhost
+  remote_user: ghost
+
+
+
+
+
+
+

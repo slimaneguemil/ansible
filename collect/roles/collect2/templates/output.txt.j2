@@ -1,0 +1,114 @@
+#date
+  {{ansible_date_time.date}} {{ansible_date_time.hour}}:{{ansible_date_time.minute}}:{{ansible_date_time.second}}
+
+#Hostname:
+  {{ ansible_hostname }}
+
+#host ip :
+{% for address in ansible_all_ipv4_addresses %}
+  {{address}}
+{% endfor %}
+
+#ip route:
+#host files :
+  {% for line in var_hosts.stdout_lines %}
+      {{line}}
+  {% endfor %}
+
+#Selinux status #sestatus
+  {% for line in var_selinux.stdout_lines %}
+      {{line}}
+  {% endfor %}
+
+#Firewall status #systemctl status firewalld
+    {{ var_firewall }}
+
+#iptables status @iptable -L
+{% if var_iptable.rc==2 %}
+    {{ var_iptable.msg }}
+{% else %}
+  {% for line in var_iptable.stdout_lines %}
+      {{line}}
+  {% endfor %}
+{% endif %}
+
+#crontab details #crontab -l
+{% if var_crontab.rc==1 %}
+    {{ var_crontab.stderr_lines }}
+{% else %}
+  {% for line in var_crontab.stdout_lines %}
+      {{line}}
+  {% endfor %}
+{% endif %}
+
+#configured users #cat /etc/passwd
+{% if var_passwd.rc==1 %}
+    {{ var_passwd.stderr_lines }}
+{% else %}
+  {% for line in var_passwd.stdout_lines %}
+      {{line}}
+  {% endfor %}
+{% endif %}
+
+#DNS Setup #cat /etc/resolv.conf
+{% if var_resolv.rc==1 %}
+    {{ var_resolv.stderr_lines }}
+{% else %}
+  {% for line in var_resolv.stdout_lines %}
+      {{line}}
+  {% endfor %}
+{% endif %}
+
+#SSH Setup #cat /etc/sshd_config | grep PermitRootLogin
+{% if var_sshd1.rc==1 %}
+    {{ var_sshd1.stderr_lines }}
+{% else %}
+  {% for line in var_sshd1.stdout_lines %}
+      {{line}}
+  {% endfor %}
+{% endif %}
+
+#SSH Setup #cat /etc/sshd_config | grep PermitRootLogin
+{% if var_sshd2.rc==1 %}
+    {{ var_sshd2.stderr_lines }}
+{% else %}
+  {% for line in var_sshd2.stdout_lines %}
+      {{line}}
+  {% endfor %}
+{% endif %}
+
+#Log configurations  #cat /etc/logrotate.conf
+{% if var_logrotate.rc==1 %}
+    {{ var_logrotate.stderr_lines }}
+{% else %}
+  {% for line in var_logrotate.stdout_lines %}
+      {{line}}
+  {% endfor %}
+{% endif %}
+
+#Log configurations  #cat /etc/logrotate.d/sudolog
+{% if var_logrotate_sudolog.rc==1 %}
+    {{ var_mysqlrouter.stderr_lines }}
+{% else %}
+  {% for line in var_logrotate_sudolog.stdout_lines %}
+      {{line}}
+  {% endfor %}
+{% endif %}
+
+#Log configurations  #cat /etc/logrotate.d/syslog
+{% if var_logrotate_syslog.rc==1 %}
+    {{ var_mysqlrouter.stderr_lines }}
+{% else %}
+  {% for line in var_logrotate_syslog.stdout_lines %}
+      {{line}}
+  {% endfor %}
+{% endif %}
+
+#mysql router config #cat /etc/mysqlrouter/mysqlrouter.conf
+{% if var_mysqlrouter.rc==1 %}
+    {{ var_mysqlrouter.stderr_lines }}
+{% else %}
+  {% for line in var_mysqlrouter.stdout_lines %}
+      {{line}}
+  {% endfor %}
+{% endif %}

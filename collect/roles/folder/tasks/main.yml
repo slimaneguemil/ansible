@@ -1,7 +1,0 @@
----
-# tasks file for folder
-
-- name: Create an output directory
-  file:
-    path: "{{path_output}}/{{ansible_date_time.year}}/{{ansible_date_time.month}}/{{ansible_date_time.day}}"
-    state: directory
