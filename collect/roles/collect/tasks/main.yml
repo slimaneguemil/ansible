@@ -39,7 +39,7 @@
       changed_when: false
 
     - name: Selinux status
-      command: cat /etc/hosts
+      command: sestatus
       register: var_selinux
       ignore_errors: true
       changed_when: false
